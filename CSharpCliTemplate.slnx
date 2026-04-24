@@ -1,2 +1,9 @@
 <Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CSharpCliTemplate.App/CSharpCliTemplate.App.csproj" />
+    <Project Path="src/CSharpCliTemplate.Core/CSharpCliTemplate.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/CSharpCliTemplate.UnitTests/CSharpCliTemplate.UnitTests.csproj" />
+  </Folder>
 </Solution>
