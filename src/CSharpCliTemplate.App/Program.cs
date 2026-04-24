@@ -27,6 +27,17 @@ switch (command)
         }
         break;
 
+    case "complete":
+        if (!int.TryParse(args.ElementAtOrDefault(1), out var id))
+        {
+            Console.WriteLine("Please provide a valid id");
+            return;
+        }
+
+        var completed = todoService.Complete(id);
+        Console.WriteLine($"Completed #{completed.Id}: {completed.Title}");
+        break;
+
     default:
         Console.WriteLine("Usage:");
         Console.WriteLine("  add <title>");
