@@ -1,4 +1,6 @@
-﻿using CSharpCliTemplate.Core.Interfaces;
+﻿using CSharpCliTemplate.App.Commands;
+using CSharpCliTemplate.Core.Exceptions;
+using CSharpCliTemplate.Core.Interfaces;
 using CSharpCliTemplate.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -6,41 +8,32 @@ var services = new ServiceCollection();
 
 services.AddSingleton<ITodoService, TodoService>();
 
+services.AddSingleton<ICommand, AddCommand>();
+services.AddSingleton<ICommand, ListCommand>();
+services.AddSingleton<ICommand, CompleteCommand>();
+
 var provider = services.BuildServiceProvider();
-var todoService = provider.GetRequiredService<ITodoService>();
 
-var command = args.FirstOrDefault();
+var commands = provider.GetServices<ICommand>();
+var commandName = args.FirstOrDefault();
 
-switch (command)
+var command = commands.FirstOrDefault(c => c.Name == commandName);
+
+try
 {
-    case "add":
-        var title = string.Join(' ', args.Skip(1));
-        var item = todoService.Add(title);
-        Console.WriteLine($"Added #{item.Id}: {item.Title}");
-        break;
+    if (command is null)
+    {
+        Console.WriteLine("Available commands: add, list, complete");
+        return;
+    }
 
-    case "list":
-        foreach (var todo in todoService.List())
-        {
-            var status = todo.IsComplete ? "done" : "todo";
-            Console.WriteLine($"#{todo.Id} [{status}] {todo.Title}");
-        }
-        break;
-
-    case "complete":
-        if (!int.TryParse(args.ElementAtOrDefault(1), out var id))
-        {
-            Console.WriteLine("Please provide a valid id");
-            return;
-        }
-
-        var completed = todoService.Complete(id);
-        Console.WriteLine($"Completed #{completed.Id}: {completed.Title}");
-        break;
-
-    default:
-        Console.WriteLine("Usage:");
-        Console.WriteLine("  add <title>");
-        Console.WriteLine("  list");
-        break;
+    command.Execute(args);
+}
+catch (TodoItemNotFoundException ex)
+{
+    Console.WriteLine(ex.Message);
+}
+catch (ArgumentException ex)
+{
+    Console.WriteLine(ex.Message);
 }
