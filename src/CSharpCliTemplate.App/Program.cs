@@ -3,6 +3,7 @@ using CSharpCliTemplate.Core.Exceptions;
 using CSharpCliTemplate.Core.Interfaces;
 using CSharpCliTemplate.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
+using CSharpCliTemplate.App.Persistence;
 
 var services = new ServiceCollection();
 
@@ -11,6 +12,9 @@ services.AddSingleton<ITodoService, TodoService>();
 services.AddSingleton<ICommand, AddCommand>();
 services.AddSingleton<ICommand, ListCommand>();
 services.AddSingleton<ICommand, CompleteCommand>();
+services.AddSingleton<ITodoRepository, JsonTodoRepository>();
+services.AddSingleton<ITodoService, TodoService>();
+
 
 var provider = services.BuildServiceProvider();
 

@@ -1,14 +1,23 @@
 using CSharpCliTemplate.Core.Services;
 using FluentAssertions;
+using CSharpCliTemplate.UnitTests.Fakes;
+using CSharpCliTemplate.Core.Exceptions;
 
 namespace CSharpCliTemplate.UnitTests;
 
 public class TodoServiceTests
 {
+
+
+    private static TodoService CreateService()
+    {
+        return new TodoService(new InMemoryTodoRepository());
+    }
+
     [Fact]
     public void Add_Should_Create_New_Todo_Item()
     {
-        var service = new TodoService();
+        var service = CreateService();
 
         var result = service.Add("Test task");
 
@@ -20,7 +29,7 @@ public class TodoServiceTests
     [Fact]
     public void List_Should_Return_All_Items()
     {
-        var service = new TodoService();
+        var service = CreateService();
 
         service.Add("Task 1");
         service.Add("Task 2");
@@ -33,7 +42,7 @@ public class TodoServiceTests
     [Fact]
     public void Complete_Should_Mark_Item_As_Complete()
     {
-        var service = new TodoService();
+        var service = CreateService();
 
         var item = service.Add("Test task");
 
@@ -45,10 +54,12 @@ public class TodoServiceTests
     [Fact]
     public void Complete_Should_Throw_When_Item_Not_Found()
     {
-        var service = new TodoService();
+        System.Diagnostics.Debugger.Launch();
+
+        var service = CreateService();
 
         var act = () => service.Complete(999);
 
-        act.Should().Throw<InvalidOperationException>();
+        act.Should().Throw<TodoItemNotFoundException>();
     }
 }
