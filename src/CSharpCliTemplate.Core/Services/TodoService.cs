@@ -1,13 +1,15 @@
 using CSharpCliTemplate.Core.Exceptions;
 using CSharpCliTemplate.Core.Interfaces;
 using CSharpCliTemplate.Core.Models;
+using Microsoft.Extensions.Logging;
 
 namespace CSharpCliTemplate.Core.Services;
 
-public sealed class TodoService(ITodoRepository todoRepository) : ITodoService
+public sealed class TodoService(ITodoRepository todoRepository, ILogger<TodoService> logger) : ITodoService
 {
     public TodoItem Add(string title)
     {
+        logger.LogInformation("Adding todo: {Title}", title);
         if (string.IsNullOrWhiteSpace(title))
         {
             throw new ArgumentException("Todo title cannot be empty.", nameof(title));
@@ -31,14 +33,9 @@ public sealed class TodoService(ITodoRepository todoRepository) : ITodoService
 
     public TodoItem Complete(int id)
     {
+        logger.LogInformation("Completing todo: {Id}", id);
         var items = todoRepository.GetAll().ToList();
-        var item = items.SingleOrDefault(x => x.Id == id);
-
-        if (item is null)
-        {
-            throw new TodoItemNotFoundException(id);
-        }
-
+        var item = items.SingleOrDefault(x => x.Id == id) ?? throw new TodoItemNotFoundException(id);
         var completed = item with { IsComplete = true };
 
         items.Remove(item);

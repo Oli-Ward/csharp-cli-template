@@ -1,6 +1,7 @@
 using CSharpCliTemplate.Core.Exceptions;
 using CSharpCliTemplate.Core.Services;
 using CSharpCliTemplate.UnitTests.Fakes;
+using Microsoft.Extensions.Logging.Abstractions;
 using FluentAssertions;
 
 namespace CSharpCliTemplate.UnitTests;
@@ -11,7 +12,7 @@ public class TodoServiceTests
 
     private static TodoService CreateService()
     {
-        return new TodoService(new InMemoryTodoRepository());
+        return new TodoService(new InMemoryTodoRepository(), NullLogger<TodoService>.Instance);
     }
 
     [Fact]

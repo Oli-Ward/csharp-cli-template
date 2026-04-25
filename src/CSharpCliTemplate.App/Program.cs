@@ -6,10 +6,20 @@ using CSharpCliTemplate.Core.Interfaces;
 using CSharpCliTemplate.Core.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
-var services = new ServiceCollection();
 
-services.AddSingleton<ITodoService, TodoService>();
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateLogger();
+
+var services = new ServiceCollection()
+    .AddLogging(loggingBuilder =>
+    {
+        loggingBuilder.ClearProviders();
+        loggingBuilder.AddSerilog();
+    });
 
 services.AddSingleton<ICommand, AddCommand>();
 services.AddSingleton<ICommand, ListCommand>();
