@@ -1,8 +1,10 @@
 ﻿using CSharpCliTemplate.App.Commands;
+using CSharpCliTemplate.App.Config;
 using CSharpCliTemplate.App.Persistence;
 using CSharpCliTemplate.Core.Exceptions;
 using CSharpCliTemplate.Core.Interfaces;
 using CSharpCliTemplate.Core.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 var services = new ServiceCollection();
@@ -22,6 +24,14 @@ var commands = provider.GetServices<ICommand>();
 var commandName = args.FirstOrDefault();
 
 var command = commands.FirstOrDefault(c => c.Name == commandName);
+
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: false)
+    .Build();
+
+services.Configure<StorageOptions>(
+    configuration.GetSection("Storage")
+);
 
 try
 {

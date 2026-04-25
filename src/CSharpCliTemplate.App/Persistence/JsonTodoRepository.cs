@@ -1,11 +1,14 @@
 using System.Text.Json;
+using CSharpCliTemplate.App.Config;
+using CSharpCliTemplate.Core.Interfaces;
+using CSharpCliTemplate.Core.Models;
+using Microsoft.Extensions.Options;
 
 namespace CSharpCliTemplate.App.Persistence;
 
-public sealed class JsonTodoRepository : ITodoRepository
+public sealed class JsonTodoRepository(IOptions<StorageOptions> options) : ITodoRepository
 {
-    private const string FilePath = "todos.json";
-
+    private readonly string _filePath = options.Value.TodoFilePath;
     private readonly JsonSerializerOptions _options = new()
     {
         WriteIndented = true,
@@ -13,12 +16,12 @@ public sealed class JsonTodoRepository : ITodoRepository
 
     public IReadOnlyCollection<TodoItem> GetAll()
     {
-        if (!File.Exists(FilePath))
+        if (!File.Exists(_filePath))
         {
             return [];
         }
 
-        var json = File.ReadAllText(FilePath);
+        var json = File.ReadAllText(_filePath);
 
         if (string.IsNullOrWhiteSpace(json))
         {
@@ -32,6 +35,6 @@ public sealed class JsonTodoRepository : ITodoRepository
     {
         var json = JsonSerializer.Serialize(items, _options);
 
-        File.WriteAllText(FilePath, json);
+        File.WriteAllText(_filePath, json);
     }
 }
