@@ -1,7 +1,7 @@
-using CSharpCliTemplate.Core.Services;
-using FluentAssertions;
-using CSharpCliTemplate.UnitTests.Fakes;
 using CSharpCliTemplate.Core.Exceptions;
+using CSharpCliTemplate.Core.Services;
+using CSharpCliTemplate.UnitTests.Fakes;
+using FluentAssertions;
 
 namespace CSharpCliTemplate.UnitTests;
 

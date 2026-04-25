@@ -1,9 +1,9 @@
 ﻿using CSharpCliTemplate.App.Commands;
+using CSharpCliTemplate.App.Persistence;
 using CSharpCliTemplate.Core.Exceptions;
 using CSharpCliTemplate.Core.Interfaces;
 using CSharpCliTemplate.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
-using CSharpCliTemplate.App.Persistence;
 
 var services = new ServiceCollection();
 
