@@ -1,8 +1,8 @@
 using CSharpCliTemplate.Core.Exceptions;
 using CSharpCliTemplate.Core.Services;
 using CSharpCliTemplate.UnitTests.Fakes;
-using Microsoft.Extensions.Logging.Abstractions;
 using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace CSharpCliTemplate.UnitTests;
 
